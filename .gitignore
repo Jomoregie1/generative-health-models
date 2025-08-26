@@ -1,0 +1,32 @@
+# Python bytecode/cache
+__pycache__/
+*.py[cod]
+
+# Virtual environments
+.venv/
+venv/
+env/
+ENV/
+myenv/
+.conda/
+
+# Training artifacts & data
+results/
+checkpoints/
+runs/
+*.pt
+*.pth
+*.ckpt
+
+# Build & packaging
+build/
+dist/
+pip-wheel-metadata/
+*.egg-info/
+.eggs/
+
+# OS/IDE
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
