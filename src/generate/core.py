@@ -9,7 +9,7 @@ import numpy as np
 import torch
 
 # Your project models (same import pattern used in smoke_test.py)
-from src.models.diffusion import DiffusionLow, DiffusionECG
+from models.diffusion import DiffusionLow, DiffusionECG
 
 
 # ---------------------------

@@ -49,8 +49,8 @@ WESAD_IDS = {"baseline": 1, "stress": 2, "amusement": 3}  # ids in the raw label
 
 # Defaults – tweak for your machine if needed
 DEFAULT_MILESTONES = REPO / "results/checkpoints/diffusion/milestones"
-DEFAULT_CKPT = REPO / "results/checkpoints/diffusion/ckpt_epoch_136_WEIGHTS.pt"
-DEFAULT_FOLD_DIR = REPO / "data/processed/tc_multigan_fold_S10"
+DEFAULT_CKPT = REPO / "results/checkpoints/diffusion/ckpt_epoch_130_WEIGHTS.pt"
+DEFAULT_FOLD_DIR = REPO / "data/processed/two_stream/fold_S10"
 DEFAULT_CAL_JSON = REPO / "results/evaluation/eval_ckpt136/calibration_targets.json"
 DEFAULT_NORM_LOW = DEFAULT_FOLD_DIR / "norm_low.npz"
 DEFAULT_NORM_ECG = DEFAULT_FOLD_DIR / "norm_ecg.npz"
