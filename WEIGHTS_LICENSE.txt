@@ -1,0 +1,13 @@
+Model Weights License (Research Use)
+
+These model weights (“Weights”) are provided for research and educational use.
+By using the Weights you agree to the following:
+
+1) Permitted Use. Non-commercial research, teaching, internal evaluation.
+2) Restrictions. No clinical or safety-critical use. No use to identify or attempt
+   to identify real individuals. No unlawful use.
+3) No Warranty. The Weights and outputs are provided “AS IS”.
+4) Attribution. Cite this repository in derived works or publications.
+5) Distribution. You may share the Weights only with these terms included.
+
+If you need commercial or clinical use rights, please contact: <your email>.

@@ -238,9 +238,15 @@ WESAD contains physiological data. Do not redistribute raw subject data. This re
 
 ## 15) License
 
-*(Add your chosen license here, e.g., MIT. Note if model weights are shared under a different license.)*
+### Code
+This repository’s **code** is licensed under the MIT License.  
+See [LICENSE](./LICENSE) for details.
 
----
+### Model weights & generated data
+The provided **model weights** and any **generated samples** are licensed under the terms in
+[WEIGHTS_LICENSE.txt](./WEIGHTS_LICENSE.txt). In short: research and educational use is permitted; no clinical use or safety-critical deployment. Please read the file for the full terms.
+
+> Note: The WESAD dataset is not redistributed in this repository. Users must obtain and use WESAD under its own license/terms.
 
 ### Appendix: Minimal `.dockerignore`
 
