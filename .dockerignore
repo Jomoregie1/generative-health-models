@@ -1,0 +1,29 @@
+__pycache__/
+*.py[cod]
+
+# Virtual envs
+.venv/
+venv/
+env/
+ENV/
+
+# VCS / IDE junk
+.git/
+.DS_Store
+.vscode/
+.idea/
+
+# Big data & artifacts (mount at runtime)
+data/
+results/
+runs/
+checkpoints/
+
+# Large files anywhere (safety net)
+*.pt
+*.pth
+*.npz
+*.ckpt
+*.zip
+*.tar
+*.gz
