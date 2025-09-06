@@ -4,9 +4,25 @@ import torch
 
 class TwoStreamDiffusionAdapter(nn.Module):
     """
-    Makes diffusion look like the GAN G:
-      G(z, cond_low) -> (fake_low, fake_ecg)
-    'z' is ignored. 'cond_low' is (B,120,K).
+    
+    Two-stream diffusion generator adapter.
+
+    Unifies two diffusion heads (LOW: EDA/RESP, ECG) behind a single
+    generator-like call so existing code can do:
+
+        fake_low, fake_ecg = adapter(z, cond_low)
+
+    Notes:
+    - 'z' is unused (kept for API compatibility).
+    - cond_low: (B, 120, K) one-hot sequence for the low-rate head.
+    - ECG uses a pooled per-window condition: cond_low[:, 0, :] → (B, K).
+    - Sampling knobs (steps, method, cfg_scale) are read from cfg.
+    - train()/eval() and device handling are propagated to both submodules.
+
+    Returns:
+    - fake_low: (B, 120, 2)  # EDA, RESP @ 4 Hz
+    - fake_ecg: (B, 5250, 1) # ECG @ 175 Hz
+    
     """
     def __init__(self, diff_low, diff_ecg, cfg, device):
         super().__init__()
