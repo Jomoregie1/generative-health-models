@@ -1,5 +1,5 @@
 from __future__ import annotations
-import argparse, json, hashlib, os
+import argparse, json, hashlib
 from pathlib import Path
 from typing import Tuple
 import numpy as np
@@ -40,6 +40,7 @@ def ensure_norms(milestones_dir: Path) -> Tuple[Path, Path]:
     return low, ecg
 
 # ------------- YOUR PROJECT INTEGRATION ------------- #
+
 def sample_wesad_window(*,
                         final_ckpt: Path,
                         manifest: dict,
@@ -55,7 +56,7 @@ def sample_wesad_window(*,
 
     # === EDIT THIS IMPORT to your path ===
     # If diffusion.py is at src/models/diffusion.py:
-    from src.models.diffusion import DiffusionLow, DiffusionECG  # <-- edit if needed
+    from models.diffusion import DiffusionLow, DiffusionECG  # <-- edit if needed
 
     device = "cuda" if torch.cuda.is_available() else "cpu"
 
@@ -130,7 +131,7 @@ def sample_wesad_window(*,
 
     sd_root = _norm(state)
     loaded = False
-    flat_sd = None  # keep a flat dict if we find one
+    flat_sd = None  
 
     # 2) Try obvious paired containers first (EMA preferred)
     for a, b in [("ema_low", "ema_ecg"), ("low", "ecg"), ("diff_low", "diff_ecg"), ("model_low", "model_ecg")]:

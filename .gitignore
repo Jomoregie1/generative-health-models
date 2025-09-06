@@ -15,9 +15,7 @@ data/
 results/
 checkpoints/
 runs/
-*.pt
-*.pth
-*.ckpt
+
 
 # Build & packaging
 build/
