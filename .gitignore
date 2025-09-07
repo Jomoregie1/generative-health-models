@@ -33,3 +33,5 @@ Thumbs.db
 # Optional: keep placeholder/docs inside data/
 !data/.gitkeep
 !data/README.md
+
+inference_bundle.zip
