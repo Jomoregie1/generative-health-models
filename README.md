@@ -13,10 +13,7 @@ Generate realistic **ECG, Respiration, and EDA** windows conditioned on affectiv
 
 - Run the app — the container **downloads the inference bundle** from your GitHub Release:
   ```bash
-  docker run --rm -p 8501:8501 \
-    -e WEIGHTS_ZIP_URL="https://github.com/<OWNER>/<REPO>/releases/download/v1.0.0/inference_bundle.zip" \
-    -e BUNDLE_SHA256="<PASTE-SHA256-HERE>" \
-    wesad-app
+  docker run --rm -p 8501:8501     -e WEIGHTS_ZIP_URL="https://github.com/jomoregie1/generative-health-models/releases/download/v1.0.0/inference_bundle.zip"     -e BUNDLE_SHA256="E68E9B2F2B32EC103B4F76E192EF5482E711A1EBA8B7E8EBD18F205DE3EF2811"     wesad-app
   ```
 
 - Open **http://localhost:8501**.  
@@ -24,8 +21,6 @@ Generate realistic **ECG, Respiration, and EDA** windows conditioned on affectiv
   - Milestones dir: `/app/results/checkpoints/diffusion/milestones`
   - Checkpoint: `/app/results/checkpoints/diffusion/ckpt_epoch_130_WEIGHTS.pt`
   - Fold dir: `/app/data/processed/two_stream/fold_S10`
-
-> Replace `<OWNER>/<REPO>` and `<PASTE-SHA256-HERE>` with your actual release link and hash.
 
 ---
 
@@ -151,10 +146,7 @@ inference_bundle/
 
 ### A) Docker (auto-download from Release) — **recommended**
 ```bash
-docker run --rm -p 8501:8501 \
-  -e WEIGHTS_ZIP_URL="https://github.com/<OWNER>/<REPO>/releases/download/v1.0.0/inference_bundle.zip" \
-  -e BUNDLE_SHA256="<PASTE-SHA256-HERE>" \
-  wesad-app
+docker run --rm -p 8501:8501   -e WEIGHTS_ZIP_URL="https://github.com/jomoregie1/generative-health-models/releases/download/v1.0.0/inference_bundle.zip"   -e BUNDLE_SHA256="E68E9B2F2B32EC103B4F76E192EF5482E711A1EBA8B7E8EBD18F205DE3EF2811"   wesad-app
 ```
 Open: http://localhost:8501
 
@@ -166,10 +158,7 @@ Open: http://localhost:8501
 ### B) Docker (mount local folders) — offline alternative
 Unzip the bundle locally and mount:
 ```bash
-docker run --rm -p 8501:8501 \
-  -v "/absolute/path/inference_bundle/results/checkpoints/diffusion:/app/results/checkpoints/diffusion:ro" \
-  -v "/absolute/path/inference_bundle/data/processed/two_stream/fold_S10:/app/data/processed/two_stream/fold_S10:ro" \
-  wesad-app
+docker run --rm -p 8501:8501   -v "/absolute/path/inference_bundle/results/checkpoints/diffusion:/app/results/checkpoints/diffusion:ro"   -v "/absolute/path/inference_bundle/data/processed/two_stream/fold_S10:/app/data/processed/two_stream/fold_S10:ro"   wesad-app
 ```
 
 ### C) Local (without Docker)
