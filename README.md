@@ -6,22 +6,26 @@ Generate realistic **ECG, Respiration, and EDA** windows conditioned on affectiv
 
 ## TL;DR (Quickstart)
 
-- You need **one trained checkpoint** + **milestone manifest** + **norm files** + a **processed fold** (for real references).
-- Build the image:
+- Build the app image (from repo root):
   ```bash
   docker build -t wesad-app .
   ```
-- Run the app (**Windows PowerShell** example; adjust paths):
-  ```powershell
-  docker run --rm -p 8501:8501 `
-    -v "C:\path\to\inference_bundle\results\checkpoints\diffusion:/app/results/checkpoints/diffusion:ro" `
-    -v "C:\path\to\inference_bundle\data\processed\two_stream\fold_S10:/app/data/processed/two_stream/fold_S10:ro" `
+
+- Run the app — the container **downloads the inference bundle** from your GitHub Release:
+  ```bash
+  docker run --rm -p 8501:8501 \
+    -e WEIGHTS_ZIP_URL="https://github.com/<OWNER>/<REPO>/releases/download/v1.0.0/inference_bundle.zip" \
+    -e BUNDLE_SHA256="<PASTE-SHA256-HERE>" \
     wesad-app
   ```
-- Open **http://localhost:8501** and point the sidebar to:
+
+- Open **http://localhost:8501**.  
+  Inside the container, defaults are:
   - Milestones dir: `/app/results/checkpoints/diffusion/milestones`
-  - Checkpoint: `/app/results/checkpoints/diffusion/ckpt_epoch_XXX_WEIGHTS.pt`
+  - Checkpoint: `/app/results/checkpoints/diffusion/ckpt_epoch_130_WEIGHTS.pt`
   - Fold dir: `/app/data/processed/two_stream/fold_S10`
+
+> Replace `<OWNER>/<REPO>` and `<PASTE-SHA256-HERE>` with your actual release link and hash.
 
 ---
 
@@ -78,7 +82,7 @@ requirements.txt
 
 ## 5) Inference Bundle (what the app needs)
 
-Provide these files (share as a zip or ask users to mount them):
+If you use auto-download, the bundle is fetched at runtime from your **Release**. For offline use, provide these files (zip or mount):
 
 ```
 inference_bundle/
@@ -145,60 +149,34 @@ inference_bundle/
 
 ## 10) How to Run the Application
 
-### A) Docker (recommended)
+### A) Docker (auto-download from Release) — **recommended**
+```bash
+docker run --rm -p 8501:8501 \
+  -e WEIGHTS_ZIP_URL="https://github.com/<OWNER>/<REPO>/releases/download/v1.0.0/inference_bundle.zip" \
+  -e BUNDLE_SHA256="<PASTE-SHA256-HERE>" \
+  wesad-app
+```
+Open: http://localhost:8501
 
-1) **Build the image** (from repo root):
-   ```bash
-   docker build -t wesad-app .
-   ```
+**Container defaults**
+- Milestones: `/app/results/checkpoints/diffusion/milestones`
+- Checkpoint: `/app/results/checkpoints/diffusion/ckpt_epoch_130_WEIGHTS.pt`
+- Fold dir: `/app/data/processed/two_stream/fold_S10`
 
-2) **Run** (Windows PowerShell; change paths to your bundle):
-   ```powershell
-   docker run --rm -p 8501:8501 `
-     -v "C:\path\to\inference_bundle\results\checkpoints\diffusion:/app/results/checkpoints/diffusion:ro" `
-     -v "C:\path\to\inference_bundle\data\processed\two_stream\fold_S10:/app/data/processed/two_stream/fold_S10:ro" `
-     wesad-app
-   ```
-   macOS/Linux:
-   ```bash
-   docker run --rm -p 8501:8501 \
-     -v "$HOME/inference_bundle/results/checkpoints/diffusion:/app/results/checkpoints/diffusion:ro" \
-     -v "$HOME/inference_bundle/data/processed/two_stream/fold_S10:/app/data/processed/two_stream/fold_S10:ro" \
-     wesad-app
-   ```
+### B) Docker (mount local folders) — offline alternative
+Unzip the bundle locally and mount:
+```bash
+docker run --rm -p 8501:8501 \
+  -v "/absolute/path/inference_bundle/results/checkpoints/diffusion:/app/results/checkpoints/diffusion:ro" \
+  -v "/absolute/path/inference_bundle/data/processed/two_stream/fold_S10:/app/data/processed/two_stream/fold_S10:ro" \
+  wesad-app
+```
 
-3) **Open**: http://localhost:8501
-
-4) **Sidebar paths** (inside the container):
-   - Milestones dir: `/app/results/checkpoints/diffusion/milestones`
-   - Checkpoint: `/app/results/checkpoints/diffusion/ckpt_epoch_XXX_WEIGHTS.pt`
-   - Fold dir: `/app/data/processed/two_stream/fold_S10`
-
-> **Tip:** If 8501 is busy, map another host port, e.g. `-p 8502:8501` → open http://localhost:8502.
-
-### B) Local (without Docker)
-
-1) Create a virtual env (Python 3.11 or 3.10):
-   ```bash
-   python -m venv .venv
-   # Windows
-   .\.venv\Scripts\activate
-   # macOS/Linux
-   source .venv/bin/activate
-   ```
-
-2) Install deps (CPU wheels OK):
-   ```bash
-   pip install --upgrade pip
-   pip install --index-url https://download.pytorch.org/whl/cpu torch torchvision torchaudio
-   pip install -r requirements.txt
-   ```
-
-3) Run Streamlit:
-   ```bash
-   streamlit run src/app.py
-   ```
-4) In the sidebar, set your **local** paths to the milestone/ckpt/fold.
+### C) Local (without Docker)
+1) Create a virtual env (Python 3.11 or 3.10)
+2) Install deps (CPU torch OK)
+3) `streamlit run src/app.py`  
+Then set paths in the sidebar to your local bundle.
 
 ---
 
@@ -215,10 +193,10 @@ inference_bundle/
 
 ## 12) Troubleshooting
 
-- **App starts but can’t see files**: Check that your volumes were mounted to the correct container paths. Inside the container, they should be under `/app/results/...` and `/app/data/processed/...`.
+- **App starts but can’t see files**: Check that your bundle has top-level `results/` and `data/` folders (no extra parent dir).
 - **“File not found” for milestone JSON**: The `.json` must sit next to the milestone `.pt` in the `milestones/` folder.
-- **CUDA queries**: The provided Dockerfile uses **CPU** wheels; performance is fine for demo. A CUDA variant can be added if needed.
-- **Docker build uploads GBs**: Ensure `.dockerignore` excludes `data/`, `results/`, `*.pt`, etc. (no inline comments after patterns!).
+- **Port busy**: map another host port, e.g., `-p 8502:8501` → open http://localhost:8502.
+- **Docker build uploads GBs**: Ensure `.dockerignore` excludes `data/`, `results/`, `*.pt`, `*.npz`, etc.
 
 ---
 
@@ -247,6 +225,8 @@ The provided **model weights** and any **generated samples** are licensed under 
 [WEIGHTS_LICENSE.txt](./WEIGHTS_LICENSE.txt). In short: research and educational use is permitted; no clinical use or safety-critical deployment. Please read the file for the full terms.
 
 > Note: The WESAD dataset is not redistributed in this repository. Users must obtain and use WESAD under its own license/terms.
+
+---
 
 ### Appendix: Minimal `.dockerignore`
 
